@@ -1,14 +1,73 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>SIT CYBER LOCKDOWN</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div id="lockscreen">
-      <h1>SIT CYBER - SYSTEM LOCKDOWN</h1>
-      <p>All user input has been temporarily disabled for security reasons.</p>
-    </div>
-    <script src="script.js"></script>
-  </body>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>SIT CYBER LOCKDOWN</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    background: black;
+    color: red;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none; /* prevent text selection */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none; /* disable long press menu */
+  }
+  #lockscreen {
+    text-align: center;
+    animation: blink 1s step-start infinite;
+    width: 90vw;
+    max-width: 400px;
+  }
+  @keyframes blink {
+    50% { opacity: 0.7; }
+  }
+  #countdown {
+    font-size: 2rem;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+  <div id="lockscreen">
+    <h1>SIT CYBER - SYSTEM LOCKDOWN</h1>
+    <p>All user input has been temporarily disabled for security reasons.</p>
+    <p>Do NOT close or swipe away this page!</p>
+    <div id="countdown">60</div>
+  </div>
+
+<script>
+  // Disable all input events
+  function disableInput() {
+    const blockEvent = e => e.preventDefault();
+    ['keydown','keyup','keypress','touchstart','touchmove','touchend','mousedown','mouseup','click','contextmenu'].forEach(event => {
+      document.addEventListener(event, blockEvent, true);
+    });
+  }
+  disableInput();
+
+  // Countdown timer
+  let seconds = 60;
+  const countdownEl = document.getElementById('countdown');
+  const interval = setInterval(() => {
+    seconds--;
+    countdownEl.textContent = seconds;
+    if (seconds <= 0) {
+      clearInterval(interval);
+      location.reload(); // Reload page to “unlock”
+    }
+  }, 1000);
+
+  // Optional: Try to prevent back navigation (not foolproof)
+  history.pushState(null, '', location.href);
+  window.addEventListener('popstate', function () {
+    history.pushState(null, '', location.href);
+  });
+</script>
+</body>
 </html>
+
